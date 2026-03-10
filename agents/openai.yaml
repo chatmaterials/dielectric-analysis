@@ -1,0 +1,5 @@
+interface:
+  display_name: "Dielectric Analysis"
+  short_description: "Analyze dielectric, Born, and optical data"
+  brand_color: "#2563EB"
+  default_prompt: "Use $dielectric-analysis to analyze dielectric tensors, Born charges, or optical spectra from DFT results."
