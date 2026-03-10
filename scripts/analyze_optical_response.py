@@ -19,12 +19,17 @@ def analyze(path: Path) -> dict[str, object]:
     peak = max(rows, key=lambda item: item[2])
     onset_candidates = [energy for energy, _, eps2 in rows if eps2 > 1e-6]
     onset = min(onset_candidates) if onset_candidates else None
+    visible = [row for row in rows if 1.65 <= row[0] <= 3.30]
+    visible_peak = max(visible, key=lambda item: item[2]) if visible else None
     return {
         "path": str(path),
         "peak_energy_eV": peak[0],
         "peak_epsilon2": peak[2],
         "peak_epsilon1": peak[1],
         "onset_energy_eV": onset,
+        "visible_peak_energy_eV": visible_peak[0] if visible_peak is not None else None,
+        "visible_peak_epsilon2": visible_peak[2] if visible_peak is not None else None,
+        "transparent_visible_hint": onset is not None and onset >= 3.0,
         "observations": ["Optical-response summary extracted from the sampled spectrum."],
     }
 

@@ -30,14 +30,22 @@ def analyze(path: Path) -> dict[str, object]:
     blocks = parse_blocks(path.read_text())
     atoms = []
     max_iso = None
+    spread_values = []
+    anomalous = []
     for label, matrix in blocks:
         iso = (matrix[0][0] + matrix[1][1] + matrix[2][2]) / 3.0
         atoms.append({"label": label, "isotropic_charge": iso})
+        spread_values.append(iso)
+        if abs(iso) >= 2.0:
+            anomalous.append(label)
         max_iso = iso if max_iso is None or abs(iso) > abs(max_iso) else max_iso
     return {
         "path": str(path),
         "atoms": atoms,
         "largest_isotropic_charge": max_iso,
+        "charge_spread": max(spread_values) - min(spread_values) if spread_values else 0.0,
+        "anomalous_labels": anomalous,
+        "anomalous_count": len(anomalous),
         "observations": ["Born effective charge tensors were summarized into isotropic averages."],
     }
 

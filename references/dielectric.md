@@ -1,6 +1,5 @@
 # Dielectric Notes
 
-- The arithmetic mean of the diagonal tensor elements is a compact isotropic summary.
-- Tensor anisotropy can be summarized coarsely by the spread of the diagonal elements.
-- Born effective charges should be interpreted alongside symmetry and bonding context.
-- A simple optical peak summary is useful, but not a substitute for a full spectroscopy workflow.
+- Isotropic dielectric constants are useful screening descriptors, but anisotropy and off-diagonal coupling can matter for real devices.
+- Born effective charges are often interpreted as a polarizability hint; anomalous values are suggestive, not conclusive.
+- High-k screening with an optical onset constraint is a useful triage step, but it is not a replacement for a full frequency-dependent dielectric workflow.

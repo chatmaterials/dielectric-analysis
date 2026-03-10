@@ -10,6 +10,22 @@ from analyze_dielectric_tensor import analyze as analyze_tensor
 from analyze_optical_response import analyze as analyze_optical
 
 
+def screening_note(tensor: dict[str, object] | None, optical: dict[str, object] | None) -> str:
+    if tensor is None:
+        return "Screening is incomplete without a dielectric tensor."
+    if tensor["dielectric_class"] == "high-k":
+        base = "The isotropic dielectric response already falls in a high-k regime."
+    elif tensor["dielectric_class"] == "moderate-k":
+        base = "The isotropic dielectric response is moderate and may still be useful if anisotropy remains controlled."
+    else:
+        base = "The isotropic dielectric response is low-k in this compact summary."
+    if optical is None:
+        return base
+    if optical["transparent_visible_hint"]:
+        return f"{base} The sampled optical onset is above the visible range, which is favorable for transparency-oriented screening."
+    return f"{base} The sampled optical onset enters the visible range, so transparency may be limited."
+
+
 def render_markdown(tensor: dict[str, object] | None, born: dict[str, object] | None, optical: dict[str, object] | None) -> str:
     lines = ["# Dielectric Analysis Report", ""]
     if tensor is not None:
@@ -18,6 +34,9 @@ def render_markdown(tensor: dict[str, object] | None, born: dict[str, object] | 
                 "## Dielectric Tensor",
                 f"- Isotropic average: `{tensor['isotropic_average']:.4f}`",
                 f"- Diagonal anisotropy: `{tensor['diagonal_anisotropy']:.4f}`",
+                f"- Anisotropy ratio: `{tensor['anisotropy_ratio']:.4f}`",
+                f"- Refractive index estimate: `{tensor['refractive_index_estimate']:.4f}`",
+                f"- Dielectric class: `{tensor['dielectric_class']}`",
                 "",
             ]
         )
@@ -26,6 +45,8 @@ def render_markdown(tensor: dict[str, object] | None, born: dict[str, object] | 
             [
                 "## Born Effective Charges",
                 f"- Largest isotropic charge: `{born['largest_isotropic_charge']:.4f}`",
+                f"- Charge spread: `{born['charge_spread']:.4f}`",
+                f"- Anomalous labels: `{', '.join(born['anomalous_labels']) if born['anomalous_labels'] else 'none'}`",
                 "",
             ]
         )
@@ -36,9 +57,12 @@ def render_markdown(tensor: dict[str, object] | None, born: dict[str, object] | 
                 f"- Onset energy (eV): `{optical['onset_energy_eV']:.4f}`",
                 f"- Peak energy (eV): `{optical['peak_energy_eV']:.4f}`",
                 f"- Peak epsilon2: `{optical['peak_epsilon2']:.4f}`",
+                f"- Visible peak energy (eV): `{optical['visible_peak_energy_eV']:.4f}`" if optical["visible_peak_energy_eV"] is not None else "- Visible peak energy (eV): `n/a`",
+                f"- Transparent visible hint: `{optical['transparent_visible_hint']}`",
                 "",
             ]
         )
+    lines.extend(["## Screening Note", f"- {screening_note(tensor, optical)}", ""])
     return "\n".join(lines).rstrip() + "\n"
 
 
