@@ -1,6 +1,6 @@
 ---
 name: "dielectric-analysis"
-description: "Use when the task is to analyze dielectric and optical-response quantities from DFT results, including dielectric tensors, Born effective charges, optical spectra, dielectric-screening heuristics, candidate ranking, and compact markdown reports from finished calculations."
+description: "Use when the task is to analyze dielectric and optical-response quantities from DFT results, including dielectric tensors, Born effective charges, optical spectra, high-k versus transparency tradeoff descriptors, candidate ranking, and compact markdown reports from finished calculations."
 ---
 
 # Dielectric Analysis
@@ -12,6 +12,7 @@ Use this skill for dielectric and optical-response post-processing rather than g
 - summarize a static or high-frequency dielectric tensor
 - inspect Born effective charges
 - summarize a simple optical spectrum
+- derive compact high-k versus transparency tradeoff descriptors such as energy-storage and polarity scores
 - rank multiple dielectric candidates with a compact high-k and anisotropy heuristic
 - write a compact dielectric-analysis report from existing calculations
 

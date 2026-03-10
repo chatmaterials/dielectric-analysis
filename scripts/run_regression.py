@@ -30,16 +30,20 @@ def main() -> None:
     tensor = run_json("scripts/analyze_dielectric_tensor.py", "fixtures/dielectric/dielectric_tensor.dat", "--json")
     ensure(abs(tensor["isotropic_average"] - 5.1666666667) < 1e-6, "dielectric-analysis should summarize the dielectric tensor")
     ensure(tensor["dielectric_class"] == "low-k", "dielectric-analysis should classify the reference tensor")
+    ensure(tensor["energy_storage_proxy"] > 1.9, "dielectric-analysis should compute an energy-storage proxy")
     born = run_json("scripts/analyze_born_charges.py", "fixtures/born/born_charges.dat", "--json")
     ensure(abs(born["largest_isotropic_charge"] - 2.1) < 1e-6, "dielectric-analysis should summarize Born charges")
     ensure(born["anomalous_count"] == 1, "dielectric-analysis should identify anomalous Born charges")
+    ensure(born["polarity_score"] > 4.0, "dielectric-analysis should compute a polarity score")
     optical = run_json("scripts/analyze_optical_response.py", "fixtures/optical/optical_spectrum.dat", "--json")
     ensure(abs(optical["peak_energy_eV"] - 2.5) < 1e-6, "dielectric-analysis should find the strongest optical peak")
     ensure(not optical["transparent_visible_hint"], "dielectric-analysis should identify the reference fixture as visible-active")
+    ensure(optical["optical_class"] == "lossy-visible-like", "dielectric-analysis should classify the visible optical loss regime")
     ranked = run_json(
         "scripts/compare_dielectric_candidates.py",
         "fixtures",
         "fixtures/candidates/opaque-lowk",
+        "fixtures/candidates/highk-lossy",
         "--target-epsilon",
         "5.0",
         "--max-anisotropy",

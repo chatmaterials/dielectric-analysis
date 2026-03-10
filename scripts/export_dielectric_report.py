@@ -21,9 +21,9 @@ def screening_note(tensor: dict[str, object] | None, optical: dict[str, object] 
         base = "The isotropic dielectric response is low-k in this compact summary."
     if optical is None:
         return base
-    if optical["transparent_visible_hint"]:
+    if optical["transparent_visible_hint"] and optical["optical_class"] == "transparent-like":
         return f"{base} The sampled optical onset is above the visible range, which is favorable for transparency-oriented screening."
-    return f"{base} The sampled optical onset enters the visible range, so transparency may be limited."
+    return f"{base} The sampled optical loss in the visible range is significant enough that transparency may be limited."
 
 
 def render_markdown(tensor: dict[str, object] | None, born: dict[str, object] | None, optical: dict[str, object] | None) -> str:
@@ -36,6 +36,7 @@ def render_markdown(tensor: dict[str, object] | None, born: dict[str, object] | 
                 f"- Diagonal anisotropy: `{tensor['diagonal_anisotropy']:.4f}`",
                 f"- Anisotropy ratio: `{tensor['anisotropy_ratio']:.4f}`",
                 f"- Refractive index estimate: `{tensor['refractive_index_estimate']:.4f}`",
+                f"- Energy-storage proxy: `{tensor['energy_storage_proxy']:.4f}`",
                 f"- Dielectric class: `{tensor['dielectric_class']}`",
                 "",
             ]
@@ -46,6 +47,7 @@ def render_markdown(tensor: dict[str, object] | None, born: dict[str, object] | 
                 "## Born Effective Charges",
                 f"- Largest isotropic charge: `{born['largest_isotropic_charge']:.4f}`",
                 f"- Charge spread: `{born['charge_spread']:.4f}`",
+                f"- Polarity score: `{born['polarity_score']:.4f}`",
                 f"- Anomalous labels: `{', '.join(born['anomalous_labels']) if born['anomalous_labels'] else 'none'}`",
                 "",
             ]
@@ -58,6 +60,8 @@ def render_markdown(tensor: dict[str, object] | None, born: dict[str, object] | 
                 f"- Peak energy (eV): `{optical['peak_energy_eV']:.4f}`",
                 f"- Peak epsilon2: `{optical['peak_epsilon2']:.4f}`",
                 f"- Visible peak energy (eV): `{optical['visible_peak_energy_eV']:.4f}`" if optical["visible_peak_energy_eV"] is not None else "- Visible peak energy (eV): `n/a`",
+                f"- Visible average epsilon2: `{optical['visible_average_epsilon2']:.4f}`",
+                f"- Optical class: `{optical['optical_class']}`",
                 f"- Transparent visible hint: `{optical['transparent_visible_hint']}`",
                 "",
             ]

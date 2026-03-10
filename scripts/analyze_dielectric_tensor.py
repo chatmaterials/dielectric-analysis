@@ -26,6 +26,7 @@ def analyze(path: Path) -> dict[str, object]:
         sum(rows[i][j] ** 2 for i in range(3) for j in range(3) if i != j)
     ) ** 0.5
     refractive_index = iso**0.5 if iso > 0.0 else None
+    energy_storage_proxy = iso / (1.0 + anisotropy + off_diagonal_norm)
     if iso >= 15.0:
         dielectric_class = "high-k"
     elif iso >= 8.0:
@@ -40,6 +41,7 @@ def analyze(path: Path) -> dict[str, object]:
         "anisotropy_ratio": anisotropy_ratio,
         "off_diagonal_norm": off_diagonal_norm,
         "refractive_index_estimate": refractive_index,
+        "energy_storage_proxy": energy_storage_proxy,
         "dielectric_class": dielectric_class,
         "observations": ["Dielectric tensor summary extracted from the 3x3 tensor."],
     }

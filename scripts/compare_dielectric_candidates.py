@@ -28,20 +28,26 @@ def analyze_case(root: Path, target_epsilon: float, max_anisotropy: float, minim
     anisotropy_penalty = max(0.0, float(tensor["diagonal_anisotropy"]) - max_anisotropy)
     onset_value = float(optical["onset_energy_eV"]) if optical["onset_energy_eV"] is not None else 0.0
     onset_penalty = max(0.0, minimum_onset - onset_value)
-    score = epsilon_penalty + anisotropy_penalty + onset_penalty
+    visible_penalty = max(0.0, float(optical["visible_average_epsilon2"]) - 0.3)
+    score = epsilon_penalty + anisotropy_penalty + onset_penalty + visible_penalty
     return {
         "case": root.name,
         "path": str(root),
         "isotropic_average": tensor["isotropic_average"],
         "diagonal_anisotropy": tensor["diagonal_anisotropy"],
+        "energy_storage_proxy": tensor["energy_storage_proxy"],
         "dielectric_class": tensor["dielectric_class"],
         "largest_isotropic_charge": born["largest_isotropic_charge"],
+        "polarity_score": born["polarity_score"],
         "anomalous_count": born["anomalous_count"],
         "onset_energy_eV": optical["onset_energy_eV"],
+        "visible_average_epsilon2": optical["visible_average_epsilon2"],
+        "optical_class": optical["optical_class"],
         "transparent_visible_hint": optical["transparent_visible_hint"],
         "epsilon_penalty": epsilon_penalty,
         "anisotropy_penalty": anisotropy_penalty,
         "onset_penalty": onset_penalty,
+        "visible_penalty": visible_penalty,
         "screening_score": score,
     }
 
@@ -53,7 +59,7 @@ def analyze_cases(roots: list[Path], target_epsilon: float, max_anisotropy: floa
         "target_epsilon": target_epsilon,
         "max_anisotropy": max_anisotropy,
         "minimum_onset_eV": minimum_onset,
-        "ranking_basis": "screening_score = epsilon_penalty + anisotropy_penalty + onset_penalty",
+        "ranking_basis": "screening_score = epsilon_penalty + anisotropy_penalty + onset_penalty + visible_penalty",
         "cases": ranked,
         "best_case": ranked[0]["case"] if ranked else None,
         "observations": [
