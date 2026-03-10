@@ -1,6 +1,6 @@
 ---
 name: "dielectric-analysis"
-description: "Use when the task is to analyze dielectric and optical-response quantities from DFT results, including dielectric tensors, Born effective charges, optical spectra, high-k versus transparency tradeoff descriptors, candidate ranking, and compact markdown reports from finished calculations."
+description: "Use when the task is to analyze dielectric and optical-response quantities from DFT results, including dielectric tensors, Born effective charges, optical spectra, high-k versus transparency tradeoff descriptors, application-mode candidate ranking, and compact markdown reports from finished calculations."
 ---
 
 # Dielectric Analysis
@@ -13,7 +13,7 @@ Use this skill for dielectric and optical-response post-processing rather than g
 - inspect Born effective charges
 - summarize a simple optical spectrum
 - derive compact high-k versus transparency tradeoff descriptors such as energy-storage and polarity scores
-- rank multiple dielectric candidates with a compact high-k and anisotropy heuristic
+- rank multiple dielectric candidates with balanced, transparent, or high-k screening modes
 - write a compact dielectric-analysis report from existing calculations
 
 ## Use the bundled helpers
@@ -25,7 +25,7 @@ Use this skill for dielectric and optical-response post-processing rather than g
 - `scripts/analyze_optical_response.py`
   Summarize a simple optical spectrum, identify visible-range peaks, and estimate a transparency hint.
 - `scripts/compare_dielectric_candidates.py`
-  Rank multiple dielectric candidates with a compact high-k and anisotropy heuristic.
+  Rank multiple dielectric candidates with balanced, transparent, or high-k screening modes.
 - `scripts/export_dielectric_report.py`
   Export a markdown dielectric-analysis report.
 

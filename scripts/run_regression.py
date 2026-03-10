@@ -39,6 +39,7 @@ def main() -> None:
     ensure(abs(optical["peak_energy_eV"] - 2.5) < 1e-6, "dielectric-analysis should find the strongest optical peak")
     ensure(not optical["transparent_visible_hint"], "dielectric-analysis should identify the reference fixture as visible-active")
     ensure(optical["optical_class"] == "lossy-visible-like", "dielectric-analysis should classify the visible optical loss regime")
+    ensure(optical["loss_tangent_at_peak"] > 0.5, "dielectric-analysis should compute a loss tangent proxy")
     ranked = run_json(
         "scripts/compare_dielectric_candidates.py",
         "fixtures",
@@ -50,9 +51,27 @@ def main() -> None:
         "2.0",
         "--minimum-onset",
         "0.0",
+        "--mode",
+        "balanced",
         "--json",
     )
     ensure(ranked["best_case"] == "fixtures", "dielectric-analysis should rank the stronger dielectric fixture ahead of the opaque low-k candidate")
+    transparent_ranked = run_json(
+        "scripts/compare_dielectric_candidates.py",
+        "fixtures",
+        "fixtures/candidates/highk-lossy",
+        "fixtures/candidates/transparent-midk",
+        "--target-epsilon",
+        "5.0",
+        "--max-anisotropy",
+        "2.0",
+        "--minimum-onset",
+        "2.5",
+        "--mode",
+        "transparent",
+        "--json",
+    )
+    ensure(transparent_ranked["best_case"] == "transparent-midk", "dielectric-analysis should rank the transparent candidate first in transparent mode")
     temp_dir = Path(tempfile.mkdtemp(prefix="dielectric-analysis-report-"))
     try:
         report_path = Path(

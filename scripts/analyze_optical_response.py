@@ -22,12 +22,15 @@ def analyze(path: Path) -> dict[str, object]:
     visible = [row for row in rows if 1.65 <= row[0] <= 3.30]
     visible_peak = max(visible, key=lambda item: item[2]) if visible else None
     visible_average = sum(item[2] for item in visible) / len(visible) if visible else 0.0
+    visible_average_eps1 = sum(item[1] for item in visible) / len(visible) if visible else 0.0
     if onset is not None and onset >= 3.0 and visible_average <= 0.2:
         optical_class = "transparent-like"
     elif visible_average <= 0.8:
         optical_class = "moderate-loss-like"
     else:
         optical_class = "lossy-visible-like"
+    loss_tangent_peak = peak[2] / max(abs(peak[1]), 1e-6)
+    transparency_quality = (onset if onset is not None else 0.0) / (1.0 + visible_average)
     return {
         "path": str(path),
         "peak_energy_eV": peak[0],
@@ -37,6 +40,9 @@ def analyze(path: Path) -> dict[str, object]:
         "visible_peak_energy_eV": visible_peak[0] if visible_peak is not None else None,
         "visible_peak_epsilon2": visible_peak[2] if visible_peak is not None else None,
         "visible_average_epsilon2": visible_average,
+        "visible_average_epsilon1": visible_average_eps1,
+        "loss_tangent_at_peak": loss_tangent_peak,
+        "transparency_quality_score": transparency_quality,
         "optical_class": optical_class,
         "transparent_visible_hint": onset is not None and onset >= 3.0,
         "observations": ["Optical-response summary extracted from the sampled spectrum."],

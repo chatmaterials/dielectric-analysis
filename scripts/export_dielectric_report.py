@@ -61,6 +61,8 @@ def render_markdown(tensor: dict[str, object] | None, born: dict[str, object] | 
                 f"- Peak epsilon2: `{optical['peak_epsilon2']:.4f}`",
                 f"- Visible peak energy (eV): `{optical['visible_peak_energy_eV']:.4f}`" if optical["visible_peak_energy_eV"] is not None else "- Visible peak energy (eV): `n/a`",
                 f"- Visible average epsilon2: `{optical['visible_average_epsilon2']:.4f}`",
+                f"- Loss tangent at peak: `{optical['loss_tangent_at_peak']:.4f}`",
+                f"- Transparency quality score: `{optical['transparency_quality_score']:.4f}`",
                 f"- Optical class: `{optical['optical_class']}`",
                 f"- Transparent visible hint: `{optical['transparent_visible_hint']}`",
                 "",
