@@ -1,5 +1,7 @@
 # dielectric-analysis
 
+[![CI](https://img.shields.io/github/actions/workflow/status/chatmaterials/dielectric-analysis/ci.yml?branch=main&label=CI)](https://github.com/chatmaterials/dielectric-analysis/actions/workflows/ci.yml) [![Release](https://img.shields.io/github/v/release/chatmaterials/dielectric-analysis?display_name=tag)](https://github.com/chatmaterials/dielectric-analysis/releases)
+
 Standalone skill for dielectric and optical-response analysis from DFT results.
 
 ## Install
